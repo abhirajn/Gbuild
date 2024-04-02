@@ -116,7 +116,7 @@ if(req.body.sDate && req.body.eDate){
 }
 
 const obj = {
-    // stud_id : auth.currentUser.uid,
+    stud_id : auth.currentUser.uid,
     ...req.body,
     ...days
 }
@@ -146,7 +146,7 @@ res.send('calculated')
 router.post('/addsubjects' , async(req,res)=>{
     const collectionref = collection(firedb , 'subjects')
     const obj = {
-        // stud_id : auth.currentUser.uid,
+        stud_id : auth.currentUser.uid,
         sem : req.body.sem,
         monday : req.body.monday,
         tuesday : req.body.tuesday,
@@ -191,7 +191,7 @@ router.post('/testresult' , (req,res)=>{
 })
 
 
-router.post('/testresult' , async(req,res)=>{
+router.get('/testresult' , async(req,res)=>{
     const collectionref = collection(firedb , 'testScores')
    
     const q = query(collectionref);
@@ -199,6 +199,7 @@ router.post('/testresult' , async(req,res)=>{
     const querySnapshot = await getDocs(q);
      var bo = true;
      let data = [];
+     console.log("hi")
     querySnapshot.forEach(async(docu) => {
         const temp = {
             id : docu.id,
@@ -220,8 +221,93 @@ router.post('/attendance' , (req,res)=>{
     res.status(200).json("saved")
 })
 
-router.get('/attendance', (req,res)=>{
-    res.send("attendence")
+router.get('/attendance', async(req,res)=>{
+    const collectionref = collection(firedb , 'subjects')
+    const calendarref = collection(firedb , 'calendar')
+
+    const qq = query(calendarref);
+    const calendarsnap = await getDocs(qq);
+    var totaldays = {};
+    calendarsnap.forEach(async(docu) => {
+      if( docu.data().obj.stud_id == auth.currentUser.uid){
+        // console.log(ddata())
+        totaldays = docu.data().obj;
+      }
+    });
+
+   console.log(totaldays);
+
+    const q = query(collectionref);
+    const querySnapshot = await getDocs(q);
+    var tobj = {};
+    querySnapshot.forEach(async(docu) => {
+      if( docu.data().obj.stud_id == auth.currentUser.uid){
+        
+        docu.data().obj.monday.map((d)=>{
+            if(d.length > 0){
+                if(tobj[d]){
+                    tobj[d] = Number(totaldays.Monday) + Number(tobj[d]);
+                }else{
+                    tobj[d] = Number(totaldays.Monday);
+                }
+            }
+        })
+
+        docu.data().obj.tuesday.map((d)=>{
+            if(d.length > 0){
+            if(tobj[d]){
+                tobj[d] = Number(totaldays.Tuesday) + Number(tobj[d]);
+            }else{
+                tobj[d] = Number(totaldays.Tuesday);
+            }
+        }
+        })
+
+        docu.data().obj.wednesday.map((d)=>{
+            if(d.length > 0){
+            if(tobj[d]){
+                tobj[d] = Number(totaldays.Wednesday) + Number(tobj[d]);
+            }else{
+                tobj[d] = Number(totaldays.Wednesday);
+            }
+        }
+        })
+
+        docu.data().obj.thursday.map((d)=>{
+            if(d.length > 0){
+            if(tobj[d]){
+                tobj[d] = Number(totaldays.Thursday) + Number(tobj[d]);
+            }else{
+                tobj[d] = Number(totaldays.Thursday);
+            }
+        }
+        })
+
+        docu.data().obj.friday.map((d)=>{
+            if(d.length > 0){
+            if(tobj[d]){
+                tobj[d] = Number(totaldays.Friday) + Number(tobj[d]);
+            }else{
+                tobj[d] = Number(totaldays.Friday);
+            }
+        }
+        })
+
+        docu.data().obj.saturday.map((d)=>{
+            if(d.length > 0){
+            if(tobj[d]){
+                tobj[d] = Number(totaldays.Saturday) + Number(tobj[d]);
+            }else{
+                tobj[d] = Number(totaldays.Saturday);
+            }
+        }
+        })
+
+
+      }
+    });
+
+    res.send(tobj)
 })
 
 module.exports = router
