@@ -180,7 +180,48 @@ router.post('/addsubjects' , async(req,res)=>{
 
 
 
+router.post('/testresult' , (req,res)=>{
+    const collectionref = collection(firedb , 'testScores')
+    const obj = {
+        stud_id : auth.currentUser.uid,
+        ...req.body
+    }
+    addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
+    res.status(200).json("saved")
+})
 
 
+router.post('/testresult' , async(req,res)=>{
+    const collectionref = collection(firedb , 'testScores')
+   
+    const q = query(collectionref);
+
+    const querySnapshot = await getDocs(q);
+     var bo = true;
+     let data = [];
+    querySnapshot.forEach(async(docu) => {
+        const temp = {
+            id : docu.id,
+            ...docu.data()
+        }
+      data.push(temp)
+    });
+    res.send(data);
+})
+
+router.post('/attendance' , (req,res)=>{
+    const collectionref = collection(firedb , 'attendance')
+    // const{date , subject , num}  =req.body;
+    const obj = {
+        stud_id : auth.currentUser.uid,
+        ...req.body
+    }
+    addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
+    res.status(200).json("saved")
+})
+
+router.get('/attendance', (req,res)=>{
+    res.send("attendence")
+})
 
 module.exports = router
