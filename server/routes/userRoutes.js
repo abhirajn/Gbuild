@@ -199,7 +199,7 @@ router.get('/testresult' , async(req,res)=>{
     const querySnapshot = await getDocs(q);
      var bo = true;
      let data = [];
-     console.log("hi")
+    //  console.log("hi")
     querySnapshot.forEach(async(docu) => {
         const temp = {
             id : docu.id,
@@ -221,7 +221,7 @@ router.post('/attendance' , (req,res)=>{
     res.status(200).json("saved")
 })
 
-router.get('/attendance', async(req,res)=>{
+router.get('/totalclasses', async(req,res)=>{
     const collectionref = collection(firedb , 'subjects')
     const calendarref = collection(firedb , 'calendar')
 
@@ -235,7 +235,7 @@ router.get('/attendance', async(req,res)=>{
       }
     });
 
-   console.log(totaldays);
+//    console.log(totaldays);
 
     const q = query(collectionref);
     const querySnapshot = await getDocs(q);
@@ -309,5 +309,116 @@ router.get('/attendance', async(req,res)=>{
 
     res.send(tobj)
 })
+
+router.get('/attendance', async(req,res)=>{
+    const collectionref = collection(firedb , 'attendance')
+    const q = query(collectionref);
+    const querySnapshot = await getDocs(q);
+    var tobj = {};
+    querySnapshot.forEach(async(docu) => {
+        if( docu.data().obj.stud_id == auth.currentUser.uid){
+            // console.log(typeof docu.data().obj)
+            Object.keys(docu.data().obj).map((d)=>{
+                if(tobj[d]){
+                    tobj[d] = Number(docu.data().obj[d]) + Number(tobj[d]);
+                }else{
+                    tobj[d] = Number(docu.data().obj[d]);
+                }
+            })
+            
+        }
+
+    })
+    res.send(tobj)
+})
+
+router.post('/expense', (req,res)=>{
+    const collectionref = collection(firedb , 'expense')  
+    const obj = {
+        stud_id : auth.currentUser.uid,
+        ...req.body
+    }
+
+    addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
+    res.send("added expense")
+})
+
+router.get('/expense', (req,res)=>{
+    const collectionref = collection(firedb , 'expense')  
+    
+    res.send([]);
+    
+})
+
+
+router.get('/getallsub',  async(req,res)=>{
+    const collectionref = collection(firedb , 'subjects')
+    const q = query(collectionref);
+    const querySnapshot = await getDocs(q);
+    var tobj = {};
+    querySnapshot.forEach(async(docu) => {
+      if( docu.data().obj.stud_id == auth.currentUser.uid){
+        
+        docu.data().obj.monday.map((d)=>{
+            if(d.length > 0){
+                if(tobj[d]){
+                }else{
+                    tobj[d] = 0;
+                }
+            }
+        })
+
+        docu.data().obj.tuesday.map((d)=>{
+            if(d.length > 0){
+                if(tobj[d]){
+                }else{
+                    tobj[d] = 0;
+                }
+        }
+        })
+
+        docu.data().obj.wednesday.map((d)=>{
+            if(d.length > 0){
+                if(tobj[d]){
+                }else{
+                    tobj[d] = 0;
+                }
+        }
+        })
+
+        docu.data().obj.thursday.map((d)=>{
+            if(d.length > 0){
+                if(tobj[d]){
+                }else{
+                    tobj[d] = 0;
+                }
+        }
+        })
+
+        docu.data().obj.friday.map((d)=>{
+            if(d.length > 0){
+                if(tobj[d]){
+                }else{
+                    tobj[d] = 0;
+                }
+        }
+        })
+
+        docu.data().obj.saturday.map((d)=>{
+            if(d.length > 0){
+                if(tobj[d]){
+                }else{
+                    tobj[d] = 0;
+                }
+        }
+        })
+
+
+      }
+    });  
+
+    res.json(tobj)
+})
+
 
 module.exports = router
