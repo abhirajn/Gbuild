@@ -1,7 +1,7 @@
 
-const { initializeApp } =  require("firebase/app");
-const {getFirestore} = require('firebase/firestore')
-const { getMessaging } = require("firebase/messaging");
+import { initializeApp }   from "firebase/app";
+import {getFirestore}  from 'firebase/firestore'
+import { getMessaging, isSupported } from "firebase/messaging"
 // const mess = require('@firebase/messaging')
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -17,10 +17,12 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-   const db = initializeApp(firebaseConfig);
-   const firedb = getFirestore(db);
-   
+ export  const db = initializeApp(firebaseConfig);
+  export const firedb = getFirestore(db);
+  export const messaging = getMessaging(db);
+    
+ 
 
-   module.exports = {db , firedb };
+//    module.exports = {db , firedb , messaging };
 
    

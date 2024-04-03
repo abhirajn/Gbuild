@@ -1,10 +1,12 @@
 const express = require('express');
 const { getAuth, createUserWithEmailAndPassword ,signInWithEmailAndPassword, updateProfile, signOut} = require("firebase/auth");
-const {db , firedb} = require('../firebaseConfig')
-const {collection ,  addDoc, where, query, getDocs , getDoc, doc, setDoc} = require('firebase/firestore')
+const {db , firedb } = require('../firebaseConfig')
+const {collection ,  addDoc, where, query, getDocs , getDoc, doc, setDoc} = require('firebase/firestore');
+const { getToken, getMessaging } = require('firebase/messaging');
 const router = express.Router();
 const auth = getAuth();
-
+// importScripts('https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js');
+// importScripts('https://www.gstatic.com/firebasejs/7.8.0/firebase-messaging.js');
 
 router.post('/calendarofevents' , async(req,res,next)=>{
     const collectionref = collection(firedb , 'calendar')
@@ -420,5 +422,29 @@ router.get('/getallsub',  async(req,res)=>{
     res.json(tobj)
 })
 
+
+router.post('/granted' , (req,res)=>{
+   
+  
+const message = {
+    data: {
+      score: '850'
+    },
+    token: "e7FcfbZKzBxgSwT-XBjXBk:APA91bGKeAo7upHQKw8ear1_8FU-kMe_78suPvo3YUbPwl70HSVyE0ReCJE_wSQ-Qu2VIBXoaJbq0KczUpiMdeCPHU9Uz-2xb5NqolCZUnaxo7VfZ3OVNlnYG2sIV4pSBR5CvJVOx6Ep"
+  };
+  
+  // Send a message to the device corresponding to the provided
+  // registration token.
+  getMessaging().send(message)
+    .then((response) => {
+      // Response is a message ID string.
+      console.log('Successfully sent message:', response);
+    })
+    .catch((error) => {
+      console.log('Error sending message:', error);
+    });
+
+    res.send("hi")
+})
 
 module.exports = router

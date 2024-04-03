@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import TestScore from './pages/TestScore';
 import Attendance from './pages/Attendance';
 import NoPage from './pages/NoPage';
+import Navbar from './components/Navbar';
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 // import './App.css'
@@ -14,6 +15,7 @@ function App() {
   return (
     <div>
       <BrowserRouter>
+      <Navbar/>
       <Routes>
         <Route path="/" element={<Home />}/>
           <Route path="/test" element={<TestScore />} />

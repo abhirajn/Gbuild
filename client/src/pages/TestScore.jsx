@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
-
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Fab, TableFooter, Box, Typography } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import styled from '@emotion/styled';
+import Modal from '@mui/material/Modal';
+import TestModal from '../components/TestModal';
 export default function TestScore() {
 
  const [cols , setCols] = useState([]);   
@@ -38,9 +41,38 @@ useEffect(()=>{
     fun();
 },[])
 
+const StyledFab = styled(Fab)({
+  position: 'absolute',
+ zIndex:1,
+  // top: "100%",
+  bottom : 25,
+  // left:1400,
+  right: 25,
+  margin: '0 auto',
+});
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+
   return (
-    <div>
-    <TableContainer component={Paper}>
+    <div style={{display:'flex' , flexDirection: "column"}}>
+   <div>
+   <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="beautiful table">
         <TableHead>
           <TableRow>
@@ -66,8 +98,27 @@ useEffect(()=>{
             </TableRow>)
          })}
         </TableBody>
+        <TableFooter>
+      
+        </TableFooter>
       </Table>
     </TableContainer>
+   </div>
+   <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <TestModal/>
+        </Box>
+      </Modal>
+   <div style={{}} >
+   <StyledFab  onClick={handleOpen} color="secondary" aria-label="add">
+            <AddIcon />
+          </StyledFab>
+   </div>
 
     </div>
   )
