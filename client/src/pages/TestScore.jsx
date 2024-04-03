@@ -23,7 +23,7 @@ useEffect(()=>{
         // console.log(cols)
         // console.log(typeof cols)
     }
-    fun();
+    // fun();
 },[])
 
 useEffect(()=>{
@@ -38,7 +38,7 @@ useEffect(()=>{
     })
       
     }
-    fun();
+    // fun();
 },[])
 
 const StyledFab = styled(Fab)({
