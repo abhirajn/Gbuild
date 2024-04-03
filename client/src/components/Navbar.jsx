@@ -12,13 +12,27 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const pages = ['Test', 'Attendance'];
-const red = ['/test' , '/attendance']
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+
 export default function Navbar() {
+const [user, setUser] = React.useState('');
+React.useEffect(()=>{
+  const fun = async() => {
+    console.log("hi")
+    const resp = await axios.get('http://localhost:3000/api/user');
+    console.log(resp.data)
+  if(resp){
+    setUser(resp.data);
+  }else{
+    setUser('')
+  }
+  }
+  // fun();
+},[])
+
 const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -100,7 +114,30 @@ const navigate = useNavigate();
                   <Typography textAlign="center" onClick={handlenavigate(i)} >{page}</Typography>
                 </MenuItem>
               ))} */}
-               <Typography textAlign="center" onClick={navigate('/test')} >Test</Typography>
+               <MenuItem onClick={()=>{
+                  navigate('/')
+              }} >
+              <Typography textAlign="center" >Home</Typography></MenuItem>
+              <MenuItem onClick={()=>{
+                  navigate('/test')
+              }} >
+              <Typography textAlign="center" >Test</Typography></MenuItem>
+              <MenuItem onClick={()=>{
+                  navigate('/attendance')
+              }} >
+              <Typography textAlign="center" >Attendance</Typography></MenuItem>
+              <MenuItem onClick={()=>{
+                  navigate('/calendar')
+              }} >
+              <Typography textAlign="center" >Calendar</Typography></MenuItem>
+              <MenuItem onClick={()=>{
+                  navigate('/timetable')
+              }} >
+              <Typography textAlign="center" >Time Table</Typography></MenuItem>
+              <MenuItem onClick={()=>{
+                  navigate('/expense')
+              }} >
+              <Typography textAlign="center" >Expense</Typography></MenuItem>
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -132,16 +169,63 @@ const navigate = useNavigate();
                 {page}
               </Button>
             ))} */}
+             <Button
+                key="calendar"
+                onClick={()=>{
+                  navigate('/')
+                }}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Home
+              </Button>
             <Button
                 key="test"
-                onClick={handleCloseNavMenu}
+                onClick={()=>{
+                  navigate('/test')
+                }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 Test
               </Button>
+              <Button
+                key="attendance"
+                onClick={()=>{
+                  navigate('/attendance')
+                }}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Attendance
+              </Button>
+              <Button
+                key="calendar"
+                onClick={()=>{
+                  navigate('/calendar')
+                }}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Calendar
+              </Button>
+              <Button
+                key="timetable"
+                onClick={()=>{
+                  navigate('/timetable')
+                }}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Time Table
+              </Button>
+              <Button
+                key="expens"
+                onClick={()=>{
+                  navigate('/expense')
+                }}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Expense
+              </Button>
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+         {user && user.length > 0? <> <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
@@ -163,13 +247,40 @@ const navigate = useNavigate();
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
+              {/* {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
-              ))}
+              ))} */}
             </Menu>
-          </Box>
+          </Box></> : <div style={{display : 'flex'}}>
+          <div>
+          <Button
+          variant='contained'
+          color='success'
+                key="login"
+                onClick={()=>{
+                  navigate('/login')
+                }}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Login
+              </Button>
+          </div>
+          <div>
+          <Button
+                key="signup"
+                variant='contained'
+                color='success'
+                onClick={()=>{
+                  navigate('/signup')
+                }}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Signup
+              </Button>
+          </div>
+          </div>}
         </Toolbar>
       </Container>
     </AppBar>

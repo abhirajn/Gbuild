@@ -15,30 +15,31 @@ useEffect(()=>{
         const resp = await axios.get('http://localhost:3000/user/getallsub');
         // console.log(typeof resp.data[0])
         var arr= [];
-        arr.push("Name")
+        arr.push("name")
         Object.keys(resp.data).forEach(d => {
             arr.push(d);
     })
         setCols(arr)
-        // console.log(cols)
+        // console.log(/cols)
         // console.log(typeof cols)
     }
-    // fun();
+    fun();
 },[])
 
 useEffect(()=>{
     const fun = async()=>{
         const resp = await axios.get('http://localhost:3000/user/testresult');
-        // console.log(typeof resp.data[0])
+        console.log(resp.data)
         // var arr= [];
         // arr.push("Name")
         setResult(resp.data)
+
         Object.keys(resp.data).forEach(d => {
             
     })
       
     }
-    // fun();
+    fun();
 },[])
 
 const StyledFab = styled(Fab)({
@@ -84,17 +85,13 @@ const style = {
         </TableHead>
         <TableBody>
          {result.map((d,i)=>{
+          // console.log(typeof d.obj)
             return(<TableRow key={d.id} >
-                 
-                     <TableCell align="center"> {d.obj.name} </TableCell>
-                     <TableCell align="center"> {d.obj.python} </TableCell>
-                     <TableCell align="center"> {d.obj.Automata} </TableCell>
-                     <TableCell align="center"> {d.obj.CN} </TableCell>
-                     <TableCell align="center"> {d.obj.DMS} </TableCell>
-                     <TableCell align="center"> {d.obj.DBMS} </TableCell>
-                     <TableCell align="center"> {d.obj.cnlab} </TableCell>
-                     <TableCell align="center"> <Button>edit</Button>  </TableCell>
-            
+                 {cols.map((dd)=>{
+                  // console.log(dd)
+                  return (<TableCell align='center'>{d.obj[dd]}</TableCell>)
+                 })}
+                              
             </TableRow>)
          })}
         </TableBody>

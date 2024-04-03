@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import axios from 'axios'
 import { getMessaging, getToken } from "firebase/messaging";
 import {messaging} from '../firebase'
+import Navbar from '../components/Navbar';
+import { Typography } from '@mui/material';
 
 export default function Home() {
   useEffect(()=>{
@@ -31,7 +33,15 @@ export default function Home() {
   },[])
 
 
+  
+
   return (
-    <div>Home</div>
+    <div>
+      <Typography>Welcome to Student Management</Typography>
+
+
+
+
+    </div>
   )
 }

@@ -5,7 +5,7 @@ import { Typography } from '@mui/material';
 export default function Chart({present , total , name}) {
     const percentage = ((present/total)*100 )
   return (
-    <div style={{border : 'solid' , width: '30%'}}>
+    <div style={{border : 'solid' , width: '25%' , margin:'3px'}}>
             <Typography sx={{mx : 2}}>{name}</Typography>
     <PieChart
     name={name}

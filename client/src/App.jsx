@@ -7,6 +7,9 @@ import NoPage from './pages/NoPage';
 import Navbar from './components/Navbar';
 import Calendar from './pages/Calendar';
 import TimeTable from './pages/TimeTable';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Expense from './pages/Expense';
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 // import './App.css'
@@ -16,14 +19,19 @@ function App() {
 
   return (
     <div>
+     
       <BrowserRouter>
-      {/* <Navbar/> */}
+     <Navbar/>
       <Routes>
+      
         <Route path="/" element={<Home />}/>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
           <Route path="/test" element={<TestScore />} />
           <Route path="/attendance" element={<Attendance />} />
           <Route path="/calendar" element={< Calendar />} />
           <Route path="/timetable" element={< TimeTable />} />
+          <Route path="/expense" element={<Expense />} />
           <Route path="*" element={<NoPage />} />
        
       </Routes>

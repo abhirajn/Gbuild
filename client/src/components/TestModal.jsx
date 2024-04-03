@@ -19,7 +19,7 @@ React.useEffect(()=>{
         })
         setSub(arr);
     }
-    // fun()
+    fun()
     
 },[])
 
@@ -33,6 +33,14 @@ console.log(num)
         [e.target.name]: e.target.value
       }));
       console.log(data)
+  }
+
+  const handlesubmit = () => {
+    const fun = async()=>{
+      const resp = await axios.post('http://localhost:3000/user/testresult', {data});
+      console.log(resp)
+  }
+  fun()
   }
   return (
     <div>
@@ -74,7 +82,7 @@ console.log(num)
         </div>)
     })}
      <Button variant="outlined" sx={{width : '50%'}} 
-    > Submit </Button>
+    onClick={handlesubmit} > Submit </Button>
   </Box>
   </div>
   )

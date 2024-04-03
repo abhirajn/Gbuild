@@ -1,25 +1,78 @@
-import React from 'react'
+import React, { useState } from 'react'
 // import * as React from 'react';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
+import axios from 'axios';
 
 export default function Calendar() {
+    const[sDate , setSDate] = useState()
+    const[eDate , setEDate] = useState()
+    const[osDate , setOsDate] = useState()
+    const[oeDate , setOeDate] = useState()
+    const[tsDate , setTsDate] = useState()
+    const[teDate , setTeDate] = useState()
+    const[thsDate , setThsDate] = useState()
+    const[theDate , setTheDate] = useState()
+    const[sem , setSem] = useState()
+
+    const handlesubmit = async() => {
+        const obj = {}
+        if(sDate){
+            obj["sDate"] = sDate
+        }
+        if(eDate){
+            obj["eDate"] = eDate
+        }
+        if(osDate){
+            obj["i1start"] = osDate
+        }
+        if(oeDate){
+            obj["i1end"] = oeDate
+        }
+        if(tsDate){
+            obj["i2start"] = tsDate
+        }
+        if(teDate){
+            obj["i2end"] = teDate
+        }
+        if(thsDate){
+            obj["i3start"] = thsDate
+        }
+        if(theDate){
+            obj["i3end"] = theDate
+        }
+        if(sem){
+            obj["sem"] = sem
+        }
+        console.log(obj)
+
+        const resp = await axios.post('http://localhost:3000/user/calendarofevents',{
+            obj
+        })
+
+    }
   return (
     <div style={{marginLeft: '25%' , marginRight: '25%'}}>
  <div>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DatePicker']}>
-        <DatePicker label="Start Date" />
+        <LocalizationProvider dateAdapter={AdapterDayjs}  >
+      <DemoContainer components={['DatePicker']} >
+        <DatePicker label="Start Date" onChange={(e)=>{
+            const s = `${e.$y}-${Number(e.$M+1)}-${e.$D}`
+            setSDate(s);
+        }} />
       </DemoContainer>
     </LocalizationProvider>
         </div>
         <div>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={['DatePicker']}>
-        <DatePicker label="End Date" />
+        <DatePicker label="End Date" onChange={(e)=>{
+            const s = `${e.$y}-${Number(e.$M+1)}-${e.$D}`
+            setEDate(s);
+        }} />
       </DemoContainer>
     </LocalizationProvider>
         </div>
@@ -32,7 +85,9 @@ export default function Calendar() {
           value={""}
           label="Sem"
           name='sem'
-        //   onChange={handleChange}
+          onChange={(e)=>{
+            setSem(e.target.value)
+          }}
         >
           <MenuItem value={1}>1</MenuItem>
           <MenuItem value={2}>2</MenuItem>
@@ -51,14 +106,20 @@ export default function Calendar() {
         <div>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={['DatePicker']}>
-        <DatePicker label="Start Date" name='1start' />
+        <DatePicker label="Start Date" name='1start' onChange={(e)=>{
+            const s = `${e.$y}-${Number(e.$M+1)}-${e.$D}`
+            setOsDate(s);
+        }} />
       </DemoContainer>
     </LocalizationProvider>
         </div>
         <div>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={['DatePicker']}>
-        <DatePicker label="End Date" name='1end'/>
+        <DatePicker label="End Date" name='1end'  onChange={(e)=>{
+            const s = `${e.$y}-${Number(e.$M+1)}-${e.$D}`
+            setOeDate(s);
+        }}/>
       </DemoContainer>
     </LocalizationProvider>
         </div>
@@ -71,14 +132,20 @@ export default function Calendar() {
         <div>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={['DatePicker']}>
-        <DatePicker label="Start Date" name='2start' />
+        <DatePicker label="Start Date" name='2start' onChange={(e)=>{
+            const s = `${e.$y}-${Number(e.$M+1)}-${e.$D}`
+            setTsDate(s);
+        }} />
       </DemoContainer>
     </LocalizationProvider>
         </div>
         <div>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={['DatePicker']}>
-        <DatePicker label="End Date" name='2end' />
+        <DatePicker label="End Date" name='2end' onChange={(e)=>{
+            const s = `${e.$y}-${Number(e.$M+1)}-${e.$D}`
+            setTeDate(s);
+        }} />
       </DemoContainer>
     </LocalizationProvider>
         </div>
@@ -91,21 +158,27 @@ export default function Calendar() {
         <div>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={['DatePicker']}>
-        <DatePicker label="Start Date" name='2start' />
+        <DatePicker label="Start Date" name='3start' onChange={(e)=>{
+            const s = `${e.$y}-${Number(e.$M+1)}-${e.$D}`
+            setThsDate(s);
+        }}/>
       </DemoContainer>
     </LocalizationProvider>
         </div>
         <div>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={['DatePicker']}>
-        <DatePicker label="End Date" name='2end' />
+        <DatePicker label="End Date" name='3end' onChange={(e)=>{
+            const s = `${e.$y}-${Number(e.$M+1)}-${e.$D}`
+            setTheDate(s);
+        }}/>
       </DemoContainer>
     </LocalizationProvider>
         </div>
         </div>
         </div>
         <div>
-        <Button variant="outlined" sx={{width : '50%'}} 
+        <Button variant="outlined" sx={{width : '50%'}} onClick={handlesubmit}
     > Submit </Button>
         </div>
     </div>

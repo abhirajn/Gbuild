@@ -39,6 +39,7 @@ router.post('/login' , (req,res,next)=>{
     const errorMessage = error.message;
     res.send(errorMessage)
   });
+  
 })
 
 router.get("/logout" , (req,res)=>{
@@ -50,4 +51,11 @@ router.get("/logout" , (req,res)=>{
 })
 
 
+router.get('/user' , (req,res)=>{
+if(auth.currentUser){
+  res.send(auth.currentUser.displayName)
+}else{
+  res.send(null)
+}
+})
 module.exports = router

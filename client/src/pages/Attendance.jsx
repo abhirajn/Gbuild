@@ -1,4 +1,4 @@
-import { useScrollTrigger } from '@mui/material';
+import { Grid, useScrollTrigger } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 // import PieChart from '../components/PieChart';
@@ -18,14 +18,16 @@ const[present ,setPresent]  =useState([]);
     const fun = async()=>{
       var arr = [];
         const resp = await axios.get('http://localhost:3000/user/totalclasses');
+        console.log(resp.data)
         // Object.keys(resp.data).map((d)=>{
           // arr/.push({key : });
         // })
+        console.log(resp.data)
         setTotal(resp.data)
-        // console.log(total)
+       
     }
     
-    // fun();
+    fun();
 },[])
 
 useEffect(()=>{
@@ -34,10 +36,11 @@ useEffect(()=>{
       const resp = await axios.get('http://localhost:3000/user/attendance');
       // Object.keys(resp.data).map((d)=>{
         // arr.push(d);
-      // })
+      // })/
+      console.log(resp.data)
       setPresent(resp.data);
   }
-  // fun();
+  fun();
 },[])
 
 const style = {
@@ -54,7 +57,7 @@ const style = {
 
 const StyledFab = styled(Fab)({
   position: 'absolute',
- zIndex:1,
+ zIndex:100,
   // top: "100%",
   bottom : 25,
   // left:1400,
@@ -67,17 +70,17 @@ const StyledFab = styled(Fab)({
   return (
     <div>
 
-      <div style={{display : 'flex' , flexDirection : 'row'}}>
+<Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{m:2}}>
 {Object.keys(total).map((d , i)=>{
   
   if(present[d]){
     // console.log(present[d])
-    return(<Chart present={Number(present[d])} total={Number(total[d])} name={d} key={d} />)
+    return( <Chart present={Number(present[d])} total={Number(total[d])} name={d} key={d} />)
   }
   return(<Chart present={0} total={Number(total[d])} name={d} key={d} />)
 })}
 
-      </div>
+      </Grid>
       <Modal
         open={open}
         onClose={handleClose}

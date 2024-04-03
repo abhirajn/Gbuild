@@ -11,6 +11,7 @@ const auth = getAuth();
 router.post('/calendarofevents' , async(req,res,next)=>{
     const collectionref = collection(firedb , 'calendar')
     // const{startDate , endDate } = req.body
+    // console.log(req.body)
     function countDaysOfWeek(startDate, endDate) {
     // Initialize counters for each day of the week
     const daysOfWeekCount = {
@@ -99,11 +100,11 @@ function minusDates(startDate, endDate) {
 }
 
 var days;
-const tempobj = req.body;
+const tempobj = req.body.obj;
 // console.log("datetype ", typeof req.body.sDate)
-if(req.body.sDate && req.body.eDate){
-    days = countDaysOfWeek(new Date(req.body.sDate), new Date(req.body.eDate))
-
+if(req.body.obj.sDate && req.body.obj.eDate){
+    days = countDaysOfWeek(new Date(req.body.obj.sDate), new Date(req.body.obj.eDate))
+// console.log(days)
     for (let key in tempobj) {
         var s ; var e;
         if (key.includes('start')) {
@@ -116,29 +117,42 @@ if(req.body.sDate && req.body.eDate){
         }
     }
 }
+// console.log(days)
 
 const obj = {
-    stud_id : auth.currentUser.uid,
-    ...req.body,
+    stud_id : "QWYEHFbutkS5tkC3xw2WfbD5bbk1",
+    ...req.body.obj,
     ...days
 }
 
 const q = query(collectionref);
 
 const querySnapshot = await getDocs(q);
- var bo = true;
-querySnapshot.forEach(async(docu) => {
-  if( docu.data().obj.sem == req.body.sem){
+ var bo = false;
+await querySnapshot.forEach(async(docu) => {
+    console.log(docu.data().obj.stud_id)
+  if( docu.data().obj.sem == req.body.obj.sem && docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1"){
+    console.log("hi")
     await setDoc(doc(firedb, "calendar", docu.id), {
        obj
-      });
-      bo = false;
+      }).then(()=>{
+        bo = true;
+        final()
+      })
+     
+    //   console.log(bo)
+    //   res.send('updated')
   }
-});
+})
 
-if(bo){
-addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
+const final = () => {
+    console.log(bo)
+    if(bo === false){
+        console.log('eelige')
+    addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
+    }
 }
+
 
 // console.log(days);
 res.send('calculated')
@@ -146,16 +160,17 @@ res.send('calculated')
 })
 
 router.post('/addsubjects' , async(req,res)=>{
+    // console.log(req.body)
     const collectionref = collection(firedb , 'subjects')
     const obj = {
-        stud_id : auth.currentUser.uid,
-        sem : req.body.sem,
-        monday : req.body.monday,
-        tuesday : req.body.tuesday,
-        wednesday : req.body.wednesday,
-        thursday : req.body.thursday,
-        friday : req.body.friday,
-        saturday : req.body.saturday
+        stud_id : "QWYEHFbutkS5tkC3xw2WfbD5bbk1",
+        sem : req.body.obj.sem,
+        monday : req.body.obj.monday,
+        tuesday : req.body.obj.tuesday,
+        wednesday : req.body.obj.wednesday,
+        thursday : req.body.obj.thursday,
+        friday : req.body.obj.friday,
+        saturday : req.body.obj.saturday
     }
     // console.log(obj);
     // const collectionRef = db.collection('subjects');
@@ -184,9 +199,10 @@ router.post('/addsubjects' , async(req,res)=>{
 
 router.post('/testresult' , (req,res)=>{
     const collectionref = collection(firedb , 'testScores')
+    console.log(req.body)
     const obj = {
-        stud_id : auth.currentUser.uid,
-        ...req.body
+        stud_id : "QWYEHFbutkS5tkC3xw2WfbD5bbk1",
+        ...req.body.data
     }
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     res.status(200).json("saved")
@@ -203,11 +219,14 @@ router.get('/testresult' , async(req,res)=>{
      let data = [];
     //  console.log("hi")
     querySnapshot.forEach(async(docu) => {
-        const temp = {
-            id : docu.id,
-            ...docu.data()
+        if(docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1"){
+            const temp = {
+                id : docu.id,
+                ...docu.data()
+            }
+          data.push(temp)
         }
-      data.push(temp)
+        
     });
     res.send(data);
 })
@@ -216,11 +235,11 @@ router.post('/attendance' , (req,res)=>{
     const collectionref = collection(firedb , 'attendance')
     // const{date , subject , num}  =req.body;
     const obj = {
-        stud_id : auth.currentUser.uid,
+        stud_id : "QWYEHFbutkS5tkC3xw2WfbD5bbk1",
         ...req.body
     }
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
-    res.status(200).json("saved")
+    res.status(200).json(obj)
 })
 
 router.get('/totalclasses', async(req,res)=>{
@@ -231,7 +250,7 @@ router.get('/totalclasses', async(req,res)=>{
     const calendarsnap = await getDocs(qq);
     var totaldays = {};
     calendarsnap.forEach(async(docu) => {
-      if( docu.data().obj.stud_id == auth.currentUser.uid){
+      if( docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1"){
         // console.log(ddata())
         totaldays = docu.data().obj;
       }
@@ -243,7 +262,7 @@ router.get('/totalclasses', async(req,res)=>{
     const querySnapshot = await getDocs(q);
     var tobj = {};
     querySnapshot.forEach(async(docu) => {
-      if( docu.data().obj.stud_id == auth.currentUser.uid){
+      if( docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1"){
         
         docu.data().obj.monday.map((d)=>{
             if(d.length > 0){
@@ -318,37 +337,52 @@ router.get('/attendance', async(req,res)=>{
     const querySnapshot = await getDocs(q);
     var tobj = {};
     querySnapshot.forEach(async(docu) => {
-        if( docu.data().obj.stud_id == auth.currentUser.uid){
-            // console.log(typeof docu.data().obj)
-            Object.keys(docu.data().obj).map((d)=>{
+        if( docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1"){
+            
+            Object.keys(docu.data().obj.data).map((d)=>{
+                // console.log("helloji", d)
                 if(tobj[d]){
-                    tobj[d] = Number(docu.data().obj[d]) + Number(tobj[d]);
+                    tobj[d] = Number(docu.data().obj.data[d]) + Number(tobj[d]);
                 }else{
-                    tobj[d] = Number(docu.data().obj[d]);
+                    tobj[d] = Number(docu.data().obj.data[d]);
                 }
             })
             
         }
-
+        // console.log("tobj" ,tobj)
     })
+   
     res.send(tobj)
 })
 
 router.post('/expense', (req,res)=>{
+    console.log(req.body)
     const collectionref = collection(firedb , 'expense')  
     const obj = {
-        stud_id : auth.currentUser.uid,
-        ...req.body
+        stud_id : "QWYEHFbutkS5tkC3xw2WfbD5bbk1",
+        ...req.body.obj
     }
 
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     res.send("added expense")
 })
 
-router.get('/expense', (req,res)=>{
+router.get('/expense', async(req,res)=>{
     const collectionref = collection(firedb , 'expense')  
-    
-    res.send([]);
+    let arr = [];
+    const q = query(collectionref);
+    const querySnapshot = await getDocs(q);
+    // var tobj = {};
+    querySnapshot.forEach(async(docu) => {
+        if( docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1"){
+            
+          arr.push(docu.data().obj);
+            
+        }
+        // console.log("tobj" ,tobj)
+    })
+    console.log("tobj" ,arr)
+    res.send(arr);
     
 })
 
@@ -359,7 +393,7 @@ router.get('/getallsub',  async(req,res)=>{
     const querySnapshot = await getDocs(q);
     var tobj = {};
     querySnapshot.forEach(async(docu) => {
-      if( docu.data().obj.stud_id == auth.currentUser.uid){
+      if( docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1"){
         
         docu.data().obj.monday.map((d)=>{
             if(d.length > 0){
@@ -445,6 +479,88 @@ const message = {
     });
 
     res.send("hi")
+})
+
+
+router.post('/getdaysub',async(req,res)=>{
+    const collectionref = collection(firedb , 'subjects')
+    const q = query(collectionref);
+    const querySnapshot = await getDocs(q);
+    var tobj = {};
+    querySnapshot.forEach(async(docu) => {
+      if( docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1" && docu.data().obj.sem == req.body.obj.sem ){
+        let currentDate = new Date(req.body.obj.date);
+     
+
+            switch (currentDate.getDay()) {
+                case 0:
+                    tobj["sub"] = []
+                    break;
+                case 1:
+                    tobj["sub"] = docu.data().obj.monday
+                    break;
+                case 2:
+                    tobj["sub"] = docu.data().obj.tuesday
+                    break;
+                case 3:
+                    tobj["sub"] = docu.data().obj.wednesday
+                    break;
+                case 4:
+                    tobj["sub"] = docu.data().obj.thursday
+                    break;
+                case 5:
+                    tobj["sub"] = docu.data().obj.friday
+                    break;
+                case 6:
+                    tobj["sub"] = docu.data().obj.saturday
+                    break;
+            }
+      
+    }
+    })
+    // console.log(tobj)
+    res.send(tobj)
+})
+
+router.post('/addtodo',(req,res)=>{
+    console.log(req.body)
+    const collectionref = collection(firedb , 'todos')  
+    const obj = {
+        stud_id : "QWYEHFbutkS5tkC3xw2WfbD5bbk1",
+        ...req.body
+    }
+
+    addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
+    res.send("added todo")
+})
+
+
+router.get('/gettodo' , async(req,res)=>{
+    const collectionref = collection(firedb , 'todos')
+    const q = query(collectionref);
+    const querySnapshot = await getDocs(q);
+    var arr = [];
+    querySnapshot.forEach(async(docu) => {
+      if( docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1" && docu.data().obj.done == false ){
+        console.log(docu.data())
+        const temp = {
+            id : docu.id,
+            obj : docu.data().obj
+        }
+            arr.push(temp)
+      }
+    })
+    res.send(arr);
+})
+
+
+router.post('/gettodo/:id',async (req,res)=>{
+    // console.log(req.params.id)
+const obj = req.body
+    await setDoc(doc(firedb, "todos", req.params.id), {
+        obj
+       })
+    res.send("updated")
 })
 
 module.exports = router
