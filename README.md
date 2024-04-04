@@ -1,3 +1,5 @@
+# Hosted Link 
+https://gbuild-1.onrender.com/  (working alright)
 # Student Management System
 
 Welcome to the Student Management System! This system is designed to assist educators and administrators in managing student-related tasks efficiently. It offers a range of features including test score analysis, attendance management, money transaction tracking, and reminders.
