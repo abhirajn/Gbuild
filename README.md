@@ -1,6 +1,9 @@
 # Student Management System
 
 Welcome to the Student Management System! This system is designed to assist educators and administrators in managing student-related tasks efficiently. It offers a range of features including test score analysis, attendance management, money transaction tracking, and reminders.
+##Video link:
+https://youtu.be/UxXVZYxW50A
+
 
 ## Features
 
