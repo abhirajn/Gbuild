@@ -11,7 +11,7 @@ export default function Login() {
     // const [name , setName] = useState('');
 
     const handleclick = async() => {
-        const res = await axios.post('http://localhost:3000/api/login', {
+        const res = await axios.post('https://gbuild.onrender.com/api/login', {
         "email" : email,
         "password" : password
         })

@@ -18,7 +18,7 @@ const handleClose = () => setOpen(false);
 useEffect(()=>{
   const fun = async() => {
     let arr = [];
-    const res = await axios.get('http://localhost:3000/user/expense').then((dd)=>{
+    const res = await axios.get('https://gbuild.onrender.com/user/expense').then((dd)=>{
       (dd.data).map((d)=>{
         console.log(d)
         setTotal(total + Number(d.money))

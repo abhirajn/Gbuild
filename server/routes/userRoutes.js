@@ -9,6 +9,7 @@ const auth = getAuth();
 // importScripts('https://www.gstatic.com/firebasejs/7.8.0/firebase-messaging.js');
 
 router.post('/calendarofevents' , async(req,res,next)=>{
+   if(auth.currentUser){
     const collectionref = collection(firedb , 'calendar')
     // const{startDate , endDate } = req.body
     // console.log(req.body)
@@ -160,12 +161,16 @@ setTimeout(()=>{
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     }
 },6000)
-res.send('calculated')
+res.send('calculated')}else{
+    res.send("login first")
+}
+
 
 })
 
 router.post('/addsubjects' , async(req,res)=>{
     // console.log(req.body)
+   if(auth.currentUser){
     const collectionref = collection(firedb , 'subjects')
     var obj = {
         "stud_id" : auth.currentUser.uid,
@@ -253,12 +258,16 @@ setTimeout(() => {
 
     // addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     res.send("subjects added")
+   }else{
+    res.send("login first")
+   }
 })
 
 
 
 router.post('/testresult' , (req,res)=>{
-    const collectionref = collection(firedb , 'testScores')
+    if(auth.currentUser){
+        const collectionref = collection(firedb , 'testScores')
     console.log(req.body)
     const obj = {
         stud_id : auth.currentUser.uid,
@@ -266,10 +275,14 @@ router.post('/testresult' , (req,res)=>{
     }
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     res.status(200).json("saved")
+    }else{
+        res.send('login first')
+    }
 })
 
 
 router.post('/testresults' , async(req,res)=>{
+   if(auth.currentUser){
     const collectionref = collection(firedb , 'testScores')
    
     const q = query(collectionref);
@@ -289,22 +302,30 @@ router.post('/testresults' , async(req,res)=>{
         
     });
     res.send(data);
+   }else{
+    res.send('login')
+   }
 })
 
 router.post('/updatetest/:id',async(req,res)=>{
-    const obj = {
-        ...req.body.data
+    if(auth.currentUser){
+        const obj = {
+            ...req.body.data
+        }
+        const id = req.params
+        console.log(obj , id)
+       const resp=  await getDoc(doc(firedb , "testScores" , id)).then(()=>{
+            console.log(resp)
+            res.send("hi")
+        })
+    }else{
+        res.send("login first")
     }
-    const id = req.params
-    console.log(obj , id)
-   const resp=  await getDoc(doc(firedb , "testScores" , id)).then(()=>{
-        console.log(resp)
-        res.send("hi")
-    })
     // res.send("hi")
 })
 
 router.post('/updatete/:id',async(req,res)=>{
+  if(auth.currentUser){
     const obj = {
         ...req.body.data
     }
@@ -326,10 +347,14 @@ router.post('/updatete/:id',async(req,res)=>{
         
     });
     res.send("hi")
+  }else{
+    res.send("login first")
+  }
 })
 
 router.post('/attendance' , (req,res)=>{
-    const collectionref = collection(firedb , 'attendance')
+    if(auth.currentUser){
+        const collectionref = collection(firedb , 'attendance')
     // const{date , subject , num}  =req.body;
     const obj = {
         stud_id : auth.currentUser.uid,
@@ -337,9 +362,13 @@ router.post('/attendance' , (req,res)=>{
     }
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     res.status(200).json(obj)
+    }else{
+        res.send("login first")
+    }
 })
 
 router.post('/totalclasses', async(req,res)=>{
+   if(auth.currentUser){
     const collectionref = collection(firedb , 'subjects')
     const calendarref = collection(firedb , 'calendar')
 
@@ -426,9 +455,13 @@ router.post('/totalclasses', async(req,res)=>{
     });
 
     res.send(tobj)
+   }else{
+    res.send("login first")
+   }
 })
 
 router.post('/attendancepresent', async(req,res)=>{
+  if(auth.currentUser){
     const collectionref = collection(firedb , 'attendance')
     const q = query(collectionref);
     const querySnapshot = await getDocs(q);
@@ -451,9 +484,13 @@ router.post('/attendancepresent', async(req,res)=>{
     })
    
     res.send(tobj)
+  }else{
+    res.send("login first")
+  }
 })
 
 router.post('/expense', (req,res)=>{
+   if(auth.currentUser){
     console.log(req.body)
     const collectionref = collection(firedb , 'expense')  
     const obj = {
@@ -463,10 +500,14 @@ router.post('/expense', (req,res)=>{
 
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     res.send("added expense")
+   }else{
+    res.send("login first")
+   }
 })
 
 router.get('/expense', async(req,res)=>{
-    const collectionref = collection(firedb , 'expense')  
+    if(auth.currentUser){
+        const collectionref = collection(firedb , 'expense')  
     let arr = [];
     const q = query(collectionref);
     const querySnapshot = await getDocs(q);
@@ -481,12 +522,16 @@ router.get('/expense', async(req,res)=>{
     })
     console.log("tobj" ,arr)
     res.send(arr);
+    }else{
+        res.send("lofin")
+    }
     
 })
 
 
 router.post('/getallsub',  async(req,res)=>{
-    console.log(req.body)
+    if(auth.currentUser){
+        console.log(req.body)
     const collectionref = collection(firedb , 'subjects')
     const q = query(collectionref);
     const querySnapshot = await getDocs(q);
@@ -553,12 +598,16 @@ router.post('/getallsub',  async(req,res)=>{
     });  
 
     res.json(tobj)
+    }else{
+        res.send("login")
+    }
 })
 
 
 router.post('/granted' , (req,res)=>{
    
-  
+if(auth.currentUser){
+      
 const message = {
     data: {
       score: '850'
@@ -578,10 +627,14 @@ const message = {
     });
 
     res.send("hi")
+}else{
+    res.send("login")
+}
 })
 
 
 router.post('/getdaysub',async(req,res)=>{
+  if(auth.currentUser){
     const collectionref = collection(firedb , 'subjects')
     const q = query(collectionref);
     const querySnapshot = await getDocs(q);
@@ -619,10 +672,14 @@ router.post('/getdaysub',async(req,res)=>{
     })
     // console.log(tobj)
     res.send(tobj)
+  }else{
+    res.send("login")
+  }
 })
 
 router.post('/addtodo',(req,res)=>{
     // console.log(req.body.obj)
+   if(auth.currentUser){
     const collectionref = collection(firedb , 'todos')  
     const obj = {
         stud_id : auth.currentUser.uid,
@@ -631,10 +688,14 @@ router.post('/addtodo',(req,res)=>{
 
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     res.send("added todo")
+   }else{
+    res.send("login")
+   }
 })
 
 
 router.get('/gettodo' , async(req,res)=>{
+  if(auth.currentUser){
     const collectionref = collection(firedb , 'todos')
     const q = query(collectionref);
     const querySnapshot = await getDocs(q);
@@ -650,11 +711,15 @@ router.get('/gettodo' , async(req,res)=>{
       }
     })
     res.send(arr);
+  }else{
+    res.send("login")
+  }
 })
 
 
 router.post('/gettodo/:id',async (req,res)=>{
-    console.log(req.body)
+    if(auth.currentUser){
+        console.log(req.body)
 const obj = {
     stud_id : auth.currentUser.uid,
         ...req.body.obj
@@ -663,6 +728,9 @@ const obj = {
         obj
        })
     res.send("updated")
+    }else{
+        res.send("login")
+    }
 })
 
 module.exports = router

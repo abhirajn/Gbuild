@@ -51,7 +51,7 @@ export default function Calendar() {
         }
         console.log(obj)
 
-        const resp = await axios.post('http://localhost:3000/user/calendarofevents',{
+        const resp = await axios.post('https://gbuild.onrender.com/user/calendarofevents',{
             obj
         })
         if(resp){

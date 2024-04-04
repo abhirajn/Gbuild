@@ -29,7 +29,7 @@ temp = sem;
         temp = defsem
       }
       var arr = [];
-        const resp = await axios.post('http://localhost:3000/user/totalclasses',{
+        const resp = await axios.post('https://gbuild.onrender.com/user/totalclasses',{
           sem : temp
         }).then((ans)=>{
           setTotal(ans.data)
@@ -56,7 +56,7 @@ temp = sem;
       temp = defsem
     }
     // var arr = [];
-      const resp = await axios.post('http://localhost:3000/user/attendancepresent',{
+      const resp = await axios.post('https://gbuild.onrender.com/user/attendancepresent',{
         sem : temp
       }).then((ans)=>{
         setPresent(ans.data);

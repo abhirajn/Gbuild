@@ -22,7 +22,7 @@ const navigate = useNavigate();
             "money" : money,
             "type" : type
         }
-        const res = await axios.post('http://localhost:3000/user/expense', {obj});
+        const res = await axios.post('https://gbuild.onrender.com/user/expense', {obj});
         console.log(res)
         setClick(!click)
         navigate('/expense')

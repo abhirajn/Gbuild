@@ -27,7 +27,7 @@ temp = sem;
       }else{
         temp = defsem
       }
-        const resp = await axios.post('http://localhost:3000/user/getallsub',{
+        const resp = await axios.post('https://gbuild.onrender.com/user/getallsub',{
           sem:temp
         });
         // console.log(typeof resp.data[0])
@@ -52,7 +52,7 @@ temp = sem;
       }else{
         temp = defsem
       }
-        const resp = await axios.post('http://localhost:3000/user/testresults',{
+        const resp = await axios.post('https://gbuild.onrender.com/user/testresults',{
           sem:temp
         });
         console.log(resp.data)

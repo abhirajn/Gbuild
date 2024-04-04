@@ -22,7 +22,7 @@ const [user, setUser] = React.useState('');
 React.useEffect(()=>{
   const fun = async() => {
     console.log("hi")
-    const resp = await axios.get('http://localhost:3000/api/user');
+    const resp = await axios.get('https://gbuild.onrender.com/api/user');
     console.log(resp.data)
   if(resp){
     setUser(resp.data);

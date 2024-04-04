@@ -61,7 +61,7 @@ export default function Home() {
     }
 
     if(id.length> 0){
-      const res = await axios.post(`http://localhost:3000/user/gettodo/${id}`,{obj}).then(()=>{
+      const res = await axios.post(`https://gbuild.onrender.com/user/gettodo/${id}`,{obj}).then(()=>{
         setId("");
       }).then(()=>{
         setClick(!click)
@@ -69,7 +69,7 @@ export default function Home() {
 
 console.log(id)
     }else{
-      const res = await axios.post('http://localhost:3000/user/addtodo',{obj}).then(()=>{
+      const res = await axios.post('https://gbuild.onrender.com/user/addtodo',{obj}).then(()=>{
         setClick(!click)
       })
       console.log(res);
@@ -84,7 +84,7 @@ console.log(id)
   useEffect(()=>{
     const fun = async() =>{
       let arr = [];
-      const res = await axios.get('http://localhost:3000/user/gettodo').then((d)=>{
+      const res = await axios.get('https://gbuild.onrender.com/user/gettodo').then((d)=>{
         Object.keys(d.data).map((dd)=>{
           arr.push(d.data[dd]);
         })
@@ -117,7 +117,7 @@ console.log(id)
     }
 
    
-      const res = await axios.post(`http://localhost:3000/user/gettodo/${data.id}`,{obj}).then(()=>{
+      const res = await axios.post(`https://gbuild.onrender.com/user/gettodo/${data.id}`,{obj}).then(()=>{
         setId("");
       }).then(()=>{
         setClick(!click)

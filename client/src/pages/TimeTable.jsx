@@ -36,7 +36,7 @@ const[sem , setSem] = useState();
             obj["saturday"] = sat.split(",");
         }
         console.log(obj)
-        const rep = await axios.post('http://localhost:3000/user/addsubjects', {obj})
+        const rep = await axios.post('https://gbuild.onrender.com/user/addsubjects', {obj})
         console.log(rep)
         if(rep){
           navigate('/')

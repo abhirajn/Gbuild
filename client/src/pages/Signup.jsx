@@ -12,7 +12,7 @@ export default function Signup() {
     const navigate = useNavigate();
 
 const handleclick = async() => {
-    const res = await axios.post('http://localhost:3000/api/signup', {
+    const res = await axios.post('https://gbuild.onrender.com/api/signup', {
         "name" : name,
     "email" : email,
     "password" : password

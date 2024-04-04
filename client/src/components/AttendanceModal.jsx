@@ -20,7 +20,7 @@ const handlechange =async(e) => {
   }
   console.log(obj)
   let arr = [];
-  const res =  await axios.post('http://localhost:3000/user/getdaysub',{
+  const res =  await axios.post('https://gbuild.onrender.com/user/getdaysub',{
     obj
   })
   Object.keys(res.data.sub).map((d, i)=>{
@@ -31,7 +31,7 @@ const handlechange =async(e) => {
 
 const handlesubmit = async() =>{
  
- const res = await axios.post('http://localhost:3000/user/attendance', {
+ const res = await axios.post('https://gbuild.onrender.com/user/attendance', {
   data
  })
   console.log(data)

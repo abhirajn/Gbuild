@@ -15,7 +15,7 @@ export default function TestEditModal({editdata}) {
       }
 
       const handleditsubmit =async()=>{
-        const resp = await axios.post(`http://localhost:3000/user/updatete/${editdata.id}`,{
+        const resp = await axios.post(`https://gbuild.onrender.com/user/updatete/${editdata.id}`,{
             data
         })
         console.log(resp)

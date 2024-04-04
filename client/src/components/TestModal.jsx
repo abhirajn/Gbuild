@@ -33,7 +33,7 @@ temp = data.sem;
         temp = defsem
       }
         let arr = [];
-        const resp = await axios.post('http://localhost:3000/user/getallsub',{
+        const resp = await axios.post('https://gbuild.onrender.com/user/getallsub',{
           sem :temp 
         });
         Object.keys(resp.data).map((d)=>{
@@ -58,7 +58,7 @@ temp = data.sem;
 
   const handlesubmit = () => {
     const fun = async()=>{
-      const resp = await axios.post('http://localhost:3000/user/testresult', {data});
+      const resp = await axios.post('https://gbuild.onrender.com/user/testresult', {data});
       console.log(resp)
   }
   fun()
