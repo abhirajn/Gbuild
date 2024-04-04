@@ -117,10 +117,10 @@ if(req.body.obj.sDate && req.body.obj.eDate){
         }
     }
 }
-// console.log(days)
+
 
 const obj = {
-    stud_id : "QWYEHFbutkS5tkC3xw2WfbD5bbk1",
+    stud_id : auth.currentUser.uid,
     ...req.body.obj,
     ...days
 }
@@ -131,7 +131,7 @@ const querySnapshot = await getDocs(q);
  var bo = false;
 await querySnapshot.forEach(async(docu) => {
     console.log(docu.data().obj.stud_id)
-  if( docu.data().obj.sem == req.body.obj.sem && docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1"){
+  if( docu.data().obj.sem == req.body.obj.sem && docu.data().obj.stud_id == auth.currentUser.uid){
     console.log("hi")
     await setDoc(doc(firedb, "calendar", docu.id), {
        obj
@@ -154,7 +154,12 @@ const final = () => {
 }
 
 
-// console.log(days);
+setTimeout(()=>{
+    if(bo === false){
+        console.log('eelige')
+    addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
+    }
+},3000)
 res.send('calculated')
 
 })
@@ -162,15 +167,15 @@ res.send('calculated')
 router.post('/addsubjects' , async(req,res)=>{
     // console.log(req.body)
     const collectionref = collection(firedb , 'subjects')
-    const obj = {
-        stud_id : "QWYEHFbutkS5tkC3xw2WfbD5bbk1",
-        sem : req.body.obj.sem,
-        monday : req.body.obj.monday,
-        tuesday : req.body.obj.tuesday,
-        wednesday : req.body.obj.wednesday,
-        thursday : req.body.obj.thursday,
-        friday : req.body.obj.friday,
-        saturday : req.body.obj.saturday
+    var obj = {
+        "stud_id" : auth.currentUser.uid,
+        "sem" : req.body.obj.sem,
+        "monday" : req.body.obj.monday,
+        "tuesday" : req.body.obj.tuesday,
+        "wednesday" : req.body.obj.wednesday,
+        "thursday" : req.body.obj.thursday,
+        "friday" : req.body.obj.friday,
+        "saturday" : req.body.obj.saturday
     }
     // console.log(obj);
     // const collectionRef = db.collection('subjects');
@@ -179,17 +184,27 @@ router.post('/addsubjects' , async(req,res)=>{
     const querySnapshot = await getDocs(q);
      var bo = true;
     querySnapshot.forEach(async(docu) => {
-      if( docu.data().obj.sem == req.body.sem){
+        console.log(docu.data().obj.sem , req.body.obj.sem ,docu.data().obj.stud_id)
+      if( docu.data().obj.sem == req.body.obj.sem && docu.data().obj.stud_id == auth.currentUser.uid ){
         await setDoc(doc(firedb, "subjects", docu.id), {
            obj
-          });
-          bo = false;
+          }).then(()=>{
+            bo = false
+          })
+         
       }
     });
 
-  if(bo){
-    addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
-  }
+setTimeout(() => {
+    if(bo == true){
+        console.log("elloge");
+        addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
+    }
+}, 3000);
+
+//   if(bo){
+    // addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
+//   }
 
     // addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     res.send("subjects added")
@@ -201,7 +216,7 @@ router.post('/testresult' , (req,res)=>{
     const collectionref = collection(firedb , 'testScores')
     console.log(req.body)
     const obj = {
-        stud_id : "QWYEHFbutkS5tkC3xw2WfbD5bbk1",
+        stud_id : auth.currentUser.uid,
         ...req.body.data
     }
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
@@ -219,7 +234,7 @@ router.post('/testresults' , async(req,res)=>{
      let data = [];
     //  console.log("hi")
     querySnapshot.forEach(async(docu) => {
-        if(docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1" && docu.data().obj.sem == req.body.sem){
+        if(docu.data().obj.stud_id == auth.currentUser.uid && docu.data().obj.sem == req.body.sem){
             const temp = {
                 id : docu.id,
                 ...docu.data()
@@ -231,18 +246,55 @@ router.post('/testresults' , async(req,res)=>{
     res.send(data);
 })
 
+router.post('/updatetest/:id',async(req,res)=>{
+    const obj = {
+        ...req.body.data
+    }
+    const id = req.params
+    console.log(obj , id)
+   const resp=  await getDoc(doc(firedb , "testScores" , id)).then(()=>{
+        console.log(resp)
+        res.send("hi")
+    })
+    // res.send("hi")
+})
+
+router.post('/updatete/:id',async(req,res)=>{
+    const obj = {
+        ...req.body.data
+    }
+    const collectionref = collection(firedb , 'testScores')
+   
+    const q = query(collectionref);
+
+    const querySnapshot = await getDocs(q);
+     var bo = true;
+     let data = [];
+    //  console.log("hi")
+    querySnapshot.forEach(async(docu) => {
+        // console.log(docu.id,  req.params)
+        if(docu.data().obj.stud_id == auth.currentUser.uid && docu.id == req.params.id){
+            await setDoc(doc(firedb, "testScores", docu.id), {
+                obj
+               })  
+        }
+        
+    });
+    res.send("hi")
+})
+
 router.post('/attendance' , (req,res)=>{
     const collectionref = collection(firedb , 'attendance')
     // const{date , subject , num}  =req.body;
     const obj = {
-        stud_id : "QWYEHFbutkS5tkC3xw2WfbD5bbk1",
+        stud_id : auth.currentUser.uid,
         ...req.body
     }
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     res.status(200).json(obj)
 })
 
-router.get('/totalclasses', async(req,res)=>{
+router.post('/totalclasses', async(req,res)=>{
     const collectionref = collection(firedb , 'subjects')
     const calendarref = collection(firedb , 'calendar')
 
@@ -250,7 +302,7 @@ router.get('/totalclasses', async(req,res)=>{
     const calendarsnap = await getDocs(qq);
     var totaldays = {};
     calendarsnap.forEach(async(docu) => {
-      if( docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1"){
+      if( docu.data().obj.stud_id == auth.currentUser.uid && docu.data().obj.sem == req.body.sem){
         // console.log(ddata())
         totaldays = docu.data().obj;
       }
@@ -262,7 +314,7 @@ router.get('/totalclasses', async(req,res)=>{
     const querySnapshot = await getDocs(q);
     var tobj = {};
     querySnapshot.forEach(async(docu) => {
-      if( docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1"){
+      if( docu.data().obj.stud_id == auth.currentUser.uid &&  docu.data().obj.sem == req.body.sem){
         
         docu.data().obj.monday.map((d)=>{
             if(d.length > 0){
@@ -331,14 +383,15 @@ router.get('/totalclasses', async(req,res)=>{
     res.send(tobj)
 })
 
-router.get('/attendance', async(req,res)=>{
+router.post('/attendancepresent', async(req,res)=>{
     const collectionref = collection(firedb , 'attendance')
     const q = query(collectionref);
     const querySnapshot = await getDocs(q);
     var tobj = {};
     querySnapshot.forEach(async(docu) => {
-        if( docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1"){
-            
+    //   console.log(docu.data() , req.body.sem,docu.data().obj.stud_id)
+        if( docu.data().obj.stud_id == auth.currentUser.uid && docu.data().obj.data.sem == req.body.sem){
+            // console.log("hi")
             Object.keys(docu.data().obj.data).map((d)=>{
                 // console.log("helloji", d)
                 if(tobj[d]){
@@ -359,7 +412,7 @@ router.post('/expense', (req,res)=>{
     console.log(req.body)
     const collectionref = collection(firedb , 'expense')  
     const obj = {
-        stud_id : "QWYEHFbutkS5tkC3xw2WfbD5bbk1",
+        stud_id : auth.currentUser.uid,
         ...req.body.obj
     }
 
@@ -374,7 +427,7 @@ router.get('/expense', async(req,res)=>{
     const querySnapshot = await getDocs(q);
     // var tobj = {};
     querySnapshot.forEach(async(docu) => {
-        if( docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1"){
+        if( docu.data().obj.stud_id == auth.currentUser.uid){
             
           arr.push(docu.data().obj);
             
@@ -394,7 +447,7 @@ router.post('/getallsub',  async(req,res)=>{
     const querySnapshot = await getDocs(q);
     var tobj = {};
     querySnapshot.forEach(async(docu) => {
-      if( docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1" && docu.data().obj.sem == req.body.sem){
+      if( docu.data().obj.stud_id == auth.currentUser.uid && docu.data().obj.sem == req.body.sem){
         
         docu.data().obj.monday.map((d)=>{
             if(d.length > 0){
@@ -489,7 +542,7 @@ router.post('/getdaysub',async(req,res)=>{
     const querySnapshot = await getDocs(q);
     var tobj = {};
     querySnapshot.forEach(async(docu) => {
-      if( docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1" && docu.data().obj.sem == req.body.obj.sem ){
+      if( docu.data().obj.stud_id == auth.currentUser.uid && docu.data().obj.sem == req.body.obj.sem ){
         let currentDate = new Date(req.body.obj.date);
      
 
@@ -527,7 +580,7 @@ router.post('/addtodo',(req,res)=>{
     // console.log(req.body.obj)
     const collectionref = collection(firedb , 'todos')  
     const obj = {
-        stud_id : "QWYEHFbutkS5tkC3xw2WfbD5bbk1",
+        stud_id : auth.currentUser.uid,
         ...req.body.obj
     }
 
@@ -542,7 +595,7 @@ router.get('/gettodo' , async(req,res)=>{
     const querySnapshot = await getDocs(q);
     var arr = [];
     querySnapshot.forEach(async(docu) => {
-      if( docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1" && docu.data().obj.done == false ){
+      if( docu.data().obj.stud_id == auth.currentUser.uid && docu.data().obj.done == false ){
         console.log(docu.data())
         const temp = {
             id : docu.id,
@@ -558,7 +611,7 @@ router.get('/gettodo' , async(req,res)=>{
 router.post('/gettodo/:id',async (req,res)=>{
     console.log(req.body)
 const obj = {
-    stud_id : "QWYEHFbutkS5tkC3xw2WfbD5bbk1",
+    stud_id : auth.currentUser.uid,
         ...req.body.obj
 }
     await setDoc(doc(firedb, "todos", req.params.id), {

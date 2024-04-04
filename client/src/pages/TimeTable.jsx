@@ -33,6 +33,7 @@ const[sem , setSem] = useState();
         if(sat.length>0){
             obj["saturday"] = sat.split(",");
         }
+        console.log(obj)
         const rep = await axios.post('http://localhost:3000/user/addsubjects', {obj})
         console.log(rep)
     }

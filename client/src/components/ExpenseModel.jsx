@@ -5,14 +5,15 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { FormControl, InputLabel, MenuItem, Select , Button, TextField} from '@mui/material';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-export default function ExpenseModel() {
+export default function ExpenseModel({click ,setClick}) {
     const[sDate , setSDate] = useState()
     const[from , setFrom] = useState()
     const[to , setTo] = useState()
     const[money , setMoney] = useState()
     const[type , setType] = useState()
-
+const navigate = useNavigate();
     const handlesubmit = async() => {
         const obj = {
             "date" : sDate,
@@ -23,6 +24,8 @@ export default function ExpenseModel() {
         }
         const res = await axios.post('http://localhost:3000/user/expense', {obj});
         console.log(res)
+        setClick(!click)
+        navigate('/expense')
     }
   return (
     <div style={{}}>

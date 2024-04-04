@@ -82,7 +82,7 @@ export default function Calendar() {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={""}
+          value={sem}
           label="Sem"
           name='sem'
           onChange={(e)=>{

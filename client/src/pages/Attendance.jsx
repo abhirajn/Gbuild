@@ -1,4 +1,4 @@
-import { Grid, useScrollTrigger } from '@mui/material';
+import { FormControl, Grid, InputLabel, MenuItem, Select, useScrollTrigger } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 // import PieChart from '../components/PieChart';
@@ -12,36 +12,63 @@ import AttendanceModal from '../components/AttendanceModal';
 
  
 export default function Attendance() {
+  var defsem = null;
+  const [sem, setSem] = React.useState();
+  const local =  localStorage.getItem("sem");
+  if(local){
+    defsem  = local
+  }
 const[total ,setTotal]  =useState([]);
 const[present ,setPresent]  =useState([]);
   useEffect(()=>{
     const fun = async()=>{
+      var temp;
+      if(sem){
+temp = sem;
+      }else{
+        temp = defsem
+      }
       var arr = [];
-        const resp = await axios.get('http://localhost:3000/user/totalclasses');
-        console.log(resp.data)
+        const resp = await axios.post('http://localhost:3000/user/totalclasses',{
+          sem : temp
+        }).then((ans)=>{
+          setTotal(ans.data)
+          console.log(ans.data)
+        })
+        // console.log(resp.data)
         // Object.keys(resp.data).map((d)=>{
           // arr/.push({key : });
         // })
-        console.log(resp.data)
-        setTotal(resp.data)
+        // console.log(resp.data)
+        // setTotal(resp.data)
        
     }
     
     fun();
-},[])
+},[sem])
 
 useEffect(()=>{
   const fun = async()=>{
+    var temp;
+    if(sem){
+temp = sem;
+    }else{
+      temp = defsem
+    }
     // var arr = [];
-      const resp = await axios.get('http://localhost:3000/user/attendance');
+      const resp = await axios.post('http://localhost:3000/user/attendancepresent',{
+        sem : temp
+      }).then((ans)=>{
+        setPresent(ans.data);
+      })
       // Object.keys(resp.data).map((d)=>{
         // arr.push(d);
       // })/
-      console.log(resp.data)
-      setPresent(resp.data);
+      // console.log(resp.data)
+      
   }
   fun();
-},[])
+},[sem])
 
 const style = {
   position: 'absolute',
@@ -65,11 +92,31 @@ const StyledFab = styled(Fab)({
   margin: '0 auto',
 });
   const [open, setOpen] = React.useState(false);
+ 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (
     <div>
-
+ <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Sem</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={sem}
+          label="Sem"
+          name='sem'
+          onChange={(e)=>{setSem(e.target.value)}}
+        >
+          <MenuItem value={"1"}>1</MenuItem>
+          <MenuItem value={'2'}>2</MenuItem>
+          <MenuItem value={'3'}>3</MenuItem>
+          <MenuItem value={'4'}>4</MenuItem>
+          <MenuItem value={'5'}>5</MenuItem>
+          <MenuItem value={'6'}>6</MenuItem>
+          <MenuItem value={'7'}>7</MenuItem>
+          <MenuItem value={'8'}>8</MenuItem>
+        </Select>
+      </FormControl>
 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{m:2}}>
 {Object.keys(total).map((d , i)=>{
   

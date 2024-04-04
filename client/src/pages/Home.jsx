@@ -74,7 +74,11 @@ console.log(id)
       })
       console.log(res);
     }
-   
+   setTitle('');
+   setDes('');
+   setId('');
+   setSDate();
+   setValue();
   }
 
   useEffect(()=>{
@@ -124,8 +128,8 @@ console.log(id)
 
   return (
     <div>
-      <Typography>Welcome to Student Management</Typography>
-      <Typography variant='h2' align='center' sx={{fontFamily:'sans-serif'}} >YOUR REMAINDERS</Typography>
+      <Typography  variant='h5'>Welcome to Student Management</Typography>
+      <Typography variant='h4' align='center' sx={{fontFamily:'sans-serif'}} >YOUR REMAINDERS</Typography>
       <div style={{marginLeft : '25%' , marginRight : '25%', marginTop : '30px', display:'flex'}}> 
 <div style={{width:'100%'}}>
 <TextField label="Enter todo" align='center' fullWidth color="secondary" onChange={(e)=>{setTitle(e.target.value)}} value={title} required />
@@ -152,7 +156,9 @@ console.log(id)
       {/* <Button  sx={{marginLeft:2}} size="small" color='success' variant='outlined'  onClick={handleupdate}>Update Remainder</Button> */}
       
       </div>
+      {/* {data.length == 0 ? <><Typography variant='h6' sx={{m:5}}>No todos to show .....</Typography></>: <></>} */}
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{m:2}}>
+
     {data.map((d)=>{
       // console.log(d)
       return(<RemainderCard prop={d} handleedit={handleedit} handledone={handledone}/>)

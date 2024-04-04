@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Fab, TableFooter, Box, Typography } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Fab, TableFooter, Box, Typography, Chip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import styled from '@emotion/styled';
 import Modal from '@mui/material/Modal';
@@ -10,8 +10,11 @@ import Transaction from '../components/Transaction';
 
 export default function Expense() {
 const [trans , setTrans] = useState([]);
+const [click , setClick] = useState(false); 
 const [total, setTotal] = useState(0);
-
+const [open, setOpen] = React.useState(false);
+const handleOpen = () => setOpen(true);
+const handleClose = () => setOpen(false);
 useEffect(()=>{
   const fun = async() => {
     let arr = [];
@@ -27,7 +30,10 @@ useEffect(()=>{
     
   }
   fun();
-},[])
+  handleClose();
+},[click])
+
+
 
   const style = {
     position: 'absolute',
@@ -50,9 +56,6 @@ useEffect(()=>{
     right: 25,
     margin: '0 auto',
   });
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
   
   return (
     <div>
@@ -63,7 +66,7 @@ useEffect(()=>{
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <ExpenseModel/>
+          <ExpenseModel click={click} setClick={setClick}/>
         </Box>
       </Modal>
    <div style={{}} >
@@ -72,12 +75,33 @@ useEffect(()=>{
           </StyledFab>
    </div>
 
-   <Typography>Total transaction = {total}</Typography>
+   {/* <Typography>Total transaction = {total}</Typography> */}
+
+   <Table>
+    <TableHead>
+      <TableRow>
+        <TableCell>From</TableCell>
+        <TableCell></TableCell>
+        <TableCell>To</TableCell>
+        <TableCell>Amount</TableCell>
+        <TableCell>Type</TableCell>
+      </TableRow>
+    </TableHead>
+  
    {trans.map((d)=>{
-    return(<Transaction  from={d.from} to={d.to} money={d.money} check={d.type} />)
+console.log(d)
+    
+return(<TableRow>
+  <TableCell>{d.from}</TableCell>
+  <TableCell>{"----"}</TableCell>
+  <TableCell>{d.to}</TableCell>
+  <TableCell>{d.money}</TableCell>
+  <TableCell>  <Chip label={d.type}  color={d.type === "Debit" ? 'error' : 'success'}  /></TableCell>
+</TableRow>)
+
    })}
 
-
+</Table>
     </div>
   )
 }

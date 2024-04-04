@@ -5,6 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import styled from '@emotion/styled';
 import Modal from '@mui/material/Modal';
 import TestModal from '../components/TestModal';
+import TestEditModal from '../components/TestEditModal';
 export default function TestScore() {
 
  const [cols , setCols] = useState([]);   
@@ -41,8 +42,14 @@ temp = sem;
 
 useEffect(()=>{
     const fun = async()=>{
+      var temp;
+      if(sem){
+temp = sem;
+      }else{
+        temp = defsem
+      }
         const resp = await axios.post('http://localhost:3000/user/testresults',{
-          sem:defsem
+          sem:temp
         });
         console.log(resp.data)
         // var arr= [];
@@ -55,7 +62,7 @@ useEffect(()=>{
       
     }
     fun();
-},[])
+},[sem])
 
 const StyledFab = styled(Fab)({
   position: 'absolute',
@@ -84,7 +91,15 @@ const style = {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const [opene, setOpene] = React.useState(false);
+  const handleOpene = () => setOpene(true);
+  const handleClosee = () => setOpene(false);
 
+  const[editdata , setEditdata] = useState({});
+const handleeditclick = (d) =>{
+  handleOpene();
+  setEditdata(d)
+}
   return (
     <div style={{display:'flex' , flexDirection: "column"}}>
    <div>
@@ -98,14 +113,14 @@ const style = {
           name='sem'
           onChange={(e)=>{setSem(e.target.value)}}
         >
-          <MenuItem value={1}>1</MenuItem>
-          <MenuItem value={2}>2</MenuItem>
-          <MenuItem value={3}>3</MenuItem>
-          <MenuItem value={4}>4</MenuItem>
-          <MenuItem value={5}>5</MenuItem>
-          <MenuItem value={6}>6</MenuItem>
-          <MenuItem value={7}>7</MenuItem>
-          <MenuItem value={8}>8</MenuItem>
+          <MenuItem value={"1"}>1</MenuItem>
+          <MenuItem value={'2'}>2</MenuItem>
+          <MenuItem value={'3'}>3</MenuItem>
+          <MenuItem value={'4'}>4</MenuItem>
+          <MenuItem value={'5'}>5</MenuItem>
+          <MenuItem value={'6'}>6</MenuItem>
+          <MenuItem value={'7'}>7</MenuItem>
+          <MenuItem value={'8'}>8</MenuItem>
         </Select>
       </FormControl>
    <TableContainer component={Paper}>
@@ -120,13 +135,13 @@ const style = {
         </TableHead>
         <TableBody>
          {result.map((d,i)=>{
-          // console.log(typeof d.obj)
+          // console.log(d)
             return(<TableRow key={d.id} >
                  {cols.map((dd)=>{
                   // console.log(dd)
                   return (<TableCell align='center'>{d.obj[dd]}</TableCell>)
                  })}
-                              
+                     <TableCell><Button onClick={()=>{handleeditclick(d)}} >Edit</Button></TableCell>         
             </TableRow>)
          })}
         </TableBody>
@@ -146,6 +161,16 @@ const style = {
           <TestModal/>
         </Box>
       </Modal>
+      <Modal
+  open={opene}
+  onClose={handleClosee}
+  aria-labelledby="modal-modal-titlew"
+  aria-describedby="modal-modal-descriptiwon"
+>
+  <Box sx={style}>
+    <TestEditModal editdata={editdata}/>
+  </Box>
+</Modal>
    <div style={{}} >
    <StyledFab  onClick={handleOpen} color="secondary" aria-label="add">
             <AddIcon />
