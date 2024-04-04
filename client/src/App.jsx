@@ -16,6 +16,8 @@ import Expense from './pages/Expense';
 
 function App() {
   const [count, setCount] = useState(0)
+const globalvar = 5;
+localStorage.setItem("sem" , globalvar);
 
   return (
     <div>

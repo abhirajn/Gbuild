@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Fab, TableFooter, Box, Typography } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Fab, TableFooter, Box, Typography, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import styled from '@emotion/styled';
 import Modal from '@mui/material/Modal';
@@ -9,10 +9,23 @@ export default function TestScore() {
 
  const [cols , setCols] = useState([]);   
  const [result , setResult] = useState([]);  
-
+ var defsem = null;
+ const local =  localStorage.getItem("sem");
+ if(local){
+   defsem  = local
+ }
+ const[sem , setSem] = useState();
 useEffect(()=>{
     const fun = async()=>{
-        const resp = await axios.get('http://localhost:3000/user/getallsub');
+      var temp;
+      if(sem){
+temp = sem;
+      }else{
+        temp = defsem
+      }
+        const resp = await axios.post('http://localhost:3000/user/getallsub',{
+          sem:temp
+        });
         // console.log(typeof resp.data[0])
         var arr= [];
         arr.push("name")
@@ -24,11 +37,13 @@ useEffect(()=>{
         // console.log(typeof cols)
     }
     fun();
-},[])
+},[sem])
 
 useEffect(()=>{
     const fun = async()=>{
-        const resp = await axios.get('http://localhost:3000/user/testresult');
+        const resp = await axios.post('http://localhost:3000/user/testresults',{
+          sem:defsem
+        });
         console.log(resp.data)
         // var arr= [];
         // arr.push("Name")
@@ -73,6 +88,26 @@ const style = {
   return (
     <div style={{display:'flex' , flexDirection: "column"}}>
    <div>
+   <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Sem</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={sem}
+          label="Sem"
+          name='sem'
+          onChange={(e)=>{setSem(e.target.value)}}
+        >
+          <MenuItem value={1}>1</MenuItem>
+          <MenuItem value={2}>2</MenuItem>
+          <MenuItem value={3}>3</MenuItem>
+          <MenuItem value={4}>4</MenuItem>
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={6}>6</MenuItem>
+          <MenuItem value={7}>7</MenuItem>
+          <MenuItem value={8}>8</MenuItem>
+        </Select>
+      </FormControl>
    <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="beautiful table">
         <TableHead>

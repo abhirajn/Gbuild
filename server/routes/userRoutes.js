@@ -209,7 +209,7 @@ router.post('/testresult' , (req,res)=>{
 })
 
 
-router.get('/testresult' , async(req,res)=>{
+router.post('/testresults' , async(req,res)=>{
     const collectionref = collection(firedb , 'testScores')
    
     const q = query(collectionref);
@@ -219,7 +219,7 @@ router.get('/testresult' , async(req,res)=>{
      let data = [];
     //  console.log("hi")
     querySnapshot.forEach(async(docu) => {
-        if(docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1"){
+        if(docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1" && docu.data().obj.sem == req.body.sem){
             const temp = {
                 id : docu.id,
                 ...docu.data()
@@ -387,13 +387,14 @@ router.get('/expense', async(req,res)=>{
 })
 
 
-router.get('/getallsub',  async(req,res)=>{
+router.post('/getallsub',  async(req,res)=>{
+    console.log(req.body)
     const collectionref = collection(firedb , 'subjects')
     const q = query(collectionref);
     const querySnapshot = await getDocs(q);
     var tobj = {};
     querySnapshot.forEach(async(docu) => {
-      if( docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1"){
+      if( docu.data().obj.stud_id == "QWYEHFbutkS5tkC3xw2WfbD5bbk1" && docu.data().obj.sem == req.body.sem){
         
         docu.data().obj.monday.map((d)=>{
             if(d.length > 0){
@@ -523,11 +524,11 @@ router.post('/getdaysub',async(req,res)=>{
 })
 
 router.post('/addtodo',(req,res)=>{
-    console.log(req.body)
+    // console.log(req.body.obj)
     const collectionref = collection(firedb , 'todos')  
     const obj = {
         stud_id : "QWYEHFbutkS5tkC3xw2WfbD5bbk1",
-        ...req.body
+        ...req.body.obj
     }
 
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
@@ -555,8 +556,11 @@ router.get('/gettodo' , async(req,res)=>{
 
 
 router.post('/gettodo/:id',async (req,res)=>{
-    // console.log(req.params.id)
-const obj = req.body
+    console.log(req.body)
+const obj = {
+    stud_id : "QWYEHFbutkS5tkC3xw2WfbD5bbk1",
+        ...req.body.obj
+}
     await setDoc(doc(firedb, "todos", req.params.id), {
         obj
        })
