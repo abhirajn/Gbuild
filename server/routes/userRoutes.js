@@ -162,7 +162,7 @@ setTimeout(()=>{
     }
 },6000)
 res.send('calculated')}else{
-    res.send("login")
+    // res.send("login")
 }
 
 
@@ -259,7 +259,7 @@ setTimeout(() => {
     // addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     res.send("subjects added")
    }else{
-    res.send("login first")
+    // res.send("login first")
    }
 })
 
@@ -276,7 +276,7 @@ router.post('/testresult' , (req,res)=>{
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     res.status(200).json("saved")
     }else{
-        res.send('login first')
+        // res.send('login first')
     }
 })
 
@@ -303,7 +303,7 @@ router.post('/testresults' , async(req,res)=>{
     });
     res.send(data);
    }else{
-    res.send([])
+    // res.send([])
    }
 })
 
@@ -319,7 +319,7 @@ router.post('/updatetest/:id',async(req,res)=>{
             res.send("hi")
         })
     }else{
-        res.send("login first")
+        // res.send("login first")
     }
     // res.send("hi")
 })
@@ -348,7 +348,7 @@ router.post('/updatete/:id',async(req,res)=>{
     });
     res.send("hi")
   }else{
-    res.send("login first")
+    // res.send("login first")
   }
 })
 
@@ -363,7 +363,7 @@ router.post('/attendance' , (req,res)=>{
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     res.status(200).json(obj)
     }else{
-        res.send({})
+        // res.send({})
     }
 })
 
@@ -456,7 +456,7 @@ router.post('/totalclasses', async(req,res)=>{
 
     res.send(tobj)
    }else{
-    res.send({})
+    // res.send({})
    }
 })
 
@@ -485,7 +485,7 @@ router.post('/attendancepresent', async(req,res)=>{
    
     res.send(tobj)
   }else{
-    res.send({})
+    // res.send({})
   }
 })
 
@@ -501,7 +501,7 @@ router.post('/expense', (req,res)=>{
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     res.send("added expense")
    }else{
-    res.send("login first")
+    // res.send("login first")
    }
 })
 
@@ -523,7 +523,7 @@ router.get('/expense', async(req,res)=>{
     console.log("tobj" ,arr)
     res.send(arr);
     }else{
-        res.send([])
+        // res.send([])
     }
     
 })
@@ -599,7 +599,7 @@ router.post('/getallsub',  async(req,res)=>{
 
     res.json(tobj)
     }else{
-        res.send({})
+        // res.send({})
     }
 })
 
@@ -628,7 +628,7 @@ const message = {
 
     res.send("hi")
 }else{
-    res.send("login")
+    // res.send("login")
 }
 })
 
@@ -673,7 +673,7 @@ router.post('/getdaysub',async(req,res)=>{
     // console.log(tobj)
     res.send(tobj)
   }else{
-    res.send({})
+    // res.send({})
   }
 })
 
@@ -689,7 +689,7 @@ router.post('/addtodo',(req,res)=>{
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     res.send("added todo")
    }else{
-    res.send("login")
+    // res.send("login")
    }
 })
 
@@ -712,7 +712,7 @@ router.get('/gettodo' , async(req,res)=>{
     })
     res.send(arr);
   }else{
-    res.send([])
+    // res.send([])
   }
 })
 
@@ -729,7 +729,7 @@ const obj = {
        })
     res.send("updated")
     }else{
-        res.send("login")
+        // res.send("login")
     }
 })
 
