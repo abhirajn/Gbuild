@@ -160,7 +160,7 @@ console.log(id)
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{m:2}}>
 
     {data.map((d)=>{
-      // console.log(d)
+      console.log(d)
       return(<RemainderCard prop={d} handleedit={handleedit} handledone={handledone}/>)
      })}
     </Grid>

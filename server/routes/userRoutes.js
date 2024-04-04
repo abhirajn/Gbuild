@@ -162,7 +162,7 @@ setTimeout(()=>{
     }
 },6000)
 res.send('calculated')}else{
-    res.send("login first")
+    res.send("login")
 }
 
 
@@ -303,7 +303,7 @@ router.post('/testresults' , async(req,res)=>{
     });
     res.send(data);
    }else{
-    res.send('login')
+    res.send([])
    }
 })
 
@@ -363,7 +363,7 @@ router.post('/attendance' , (req,res)=>{
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     res.status(200).json(obj)
     }else{
-        res.send("login first")
+        res.send({})
     }
 })
 
@@ -456,7 +456,7 @@ router.post('/totalclasses', async(req,res)=>{
 
     res.send(tobj)
    }else{
-    res.send("login first")
+    res.send({})
    }
 })
 
@@ -485,7 +485,7 @@ router.post('/attendancepresent', async(req,res)=>{
    
     res.send(tobj)
   }else{
-    res.send("login first")
+    res.send({})
   }
 })
 
@@ -523,7 +523,7 @@ router.get('/expense', async(req,res)=>{
     console.log("tobj" ,arr)
     res.send(arr);
     }else{
-        res.send("lofin")
+        res.send([])
     }
     
 })
@@ -599,7 +599,7 @@ router.post('/getallsub',  async(req,res)=>{
 
     res.json(tobj)
     }else{
-        res.send("login")
+        res.send({})
     }
 })
 
@@ -673,7 +673,7 @@ router.post('/getdaysub',async(req,res)=>{
     // console.log(tobj)
     res.send(tobj)
   }else{
-    res.send("login")
+    res.send({})
   }
 })
 
@@ -712,7 +712,7 @@ router.get('/gettodo' , async(req,res)=>{
     })
     res.send(arr);
   }else{
-    res.send("login")
+    res.send([])
   }
 })
 
