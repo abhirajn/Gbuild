@@ -6,6 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function Calendar() {
     const[sDate , setSDate] = useState()
@@ -17,8 +18,9 @@ export default function Calendar() {
     const[thsDate , setThsDate] = useState()
     const[theDate , setTheDate] = useState()
     const[sem , setSem] = useState()
-
+    const navigate = useNavigate();
     const handlesubmit = async() => {
+      
         const obj = {}
         if(sDate){
             obj["sDate"] = sDate
@@ -52,10 +54,15 @@ export default function Calendar() {
         const resp = await axios.post('http://localhost:3000/user/calendarofevents',{
             obj
         })
+        if(resp){
+          alert("coe updated")
+          navigate('/')
+        }
 
     }
   return (
     <div style={{marginLeft: '25%' , marginRight: '25%'}}>
+      <Typography>Enter your calender of events</Typography>
  <div>
         <LocalizationProvider dateAdapter={AdapterDayjs}  >
       <DemoContainer components={['DatePicker']} >

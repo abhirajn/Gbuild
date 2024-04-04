@@ -146,6 +146,8 @@ const StyledFab = styled(Fab)({
    <div>
     
    </div>
+   <Typography variant='h6' sx={{m : 4}} color={'error'}>Note : Fill Time table and Calendar of events to see subjects and attendance....</Typography>
+   {(present.length == 0) || (total.length == 0) ? <><Typography color={'error'} variant='h4' sx={{m : 4}}>Fill Time table and Calendar of events to see subjects and attendance....</Typography></> : <></>}
     </div>
   )
 }

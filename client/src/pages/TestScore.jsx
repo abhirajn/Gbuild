@@ -7,9 +7,12 @@ import Modal from '@mui/material/Modal';
 import TestModal from '../components/TestModal';
 import TestEditModal from '../components/TestEditModal';
 export default function TestScore() {
-
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
  const [cols , setCols] = useState([]);   
  const [result , setResult] = useState([]);  
+ const [modalsubmit , setModalsubmit] = useState(false);  
  var defsem = null;
  const local =  localStorage.getItem("sem");
  if(local){
@@ -38,7 +41,8 @@ temp = sem;
         // console.log(typeof cols)
     }
     fun();
-},[sem])
+    handleClose()
+},[sem , modalsubmit])
 
 useEffect(()=>{
     const fun = async()=>{
@@ -62,7 +66,9 @@ temp = sem;
       
     }
     fun();
-},[sem])
+    handleClose();
+    
+},[sem,modalsubmit])
 
 const StyledFab = styled(Fab)({
   position: 'absolute',
@@ -87,9 +93,7 @@ const style = {
 };
 
 
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
 
   const [opene, setOpene] = React.useState(false);
   const handleOpene = () => setOpene(true);
@@ -103,6 +107,7 @@ const handleeditclick = (d) =>{
   return (
     <div style={{display:'flex' , flexDirection: "column"}}>
    <div>
+
    <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Sem</InputLabel>
         <Select
@@ -158,7 +163,7 @@ const handleeditclick = (d) =>{
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <TestModal/>
+          <TestModal modalsubmit={modalsubmit} setModalsubmit={setModalsubmit}/>
         </Box>
       </Modal>
       <Modal
@@ -176,7 +181,7 @@ const handleeditclick = (d) =>{
             <AddIcon />
           </StyledFab>
    </div>
-
+{cols.length == 0 || result.length == 0 ? <><Typography color={'error'} variant='h4' sx={{m : 4}}>Fill Time table and Calendar of events to see subjects and attendance....</Typography></>: <></>}
     </div>
   )
 }

@@ -4,20 +4,26 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 // import Box from '@mui/material/Box';
 import Select from '@mui/material/Select';
-import { Button, FormControl, TextField } from '@mui/material';
+import { Button, FormControl, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 // import { set } from 'mongoose';
 
-export default function TestModal() {
+export default function TestModal({modalsubmit , setModalsubmit}) {
     const [sub, setSub] = React.useState([]);
     const [Changesub, setChangesub] = React.useState(false);
-    var defsem = null;
-    const local =  localStorage.getItem("sem");
-    if(local){
-      defsem  = local
-    }
     const [data, setData] = React.useState({});
     const [num , setNum] = React.useState(0);
+   const[defsem , setDefsem] = React.useState();
+   
+  React.useEffect(()=>{
+    const local =  localStorage.getItem("sem");
+    if(local){
+      setDefsem(local)
+      console.log(local)
+    }
+    // console.log(data)
+  },[])
+    
 React.useEffect(()=>{
     const fun = async()=>{
       var temp;
@@ -56,11 +62,12 @@ temp = data.sem;
       console.log(resp)
   }
   fun()
+  setModalsubmit(!modalsubmit)
   }
 
   
 
-
+// console.log(data.sem)
   return (
     <div>
         <Box  >
@@ -89,7 +96,7 @@ temp = data.sem;
     <Button variant="outlined" sx={{width : '50%'}} 
     onClick={()=>{
       setChangesub(!Changesub)
-    }} > Change subjects </Button>
+    }} > Click to populate sujects </Button>
     {sub.map((d)=>{
         console.log(d)
         return(<div style={{display:'flex' , flexDirection : 'row' , margin:'3px'}} key={d}>
@@ -105,8 +112,9 @@ temp = data.sem;
         </div>)
     })}
      <Button variant="outlined" sx={{width : '50%'}} 
-    onClick={handlesubmit} > Submit </Button>
+    onClick={handlesubmit} > final submit </Button>
   </Box>
+  {sub.length == 0 ? <><Typography color={'error'} variant='h4' sx={{m : 4}}>Fill Time table and Calendar of events to see subjects and attendance....</Typography></>: <></>}
   </div>
   )
 }

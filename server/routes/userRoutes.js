@@ -159,7 +159,7 @@ setTimeout(()=>{
         console.log('eelige')
     addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     }
-},3000)
+},6000)
 res.send('calculated')
 
 })
@@ -169,13 +169,58 @@ router.post('/addsubjects' , async(req,res)=>{
     const collectionref = collection(firedb , 'subjects')
     var obj = {
         "stud_id" : auth.currentUser.uid,
-        "sem" : req.body.obj.sem,
-        "monday" : req.body.obj.monday,
-        "tuesday" : req.body.obj.tuesday,
-        "wednesday" : req.body.obj.wednesday,
-        "thursday" : req.body.obj.thursday,
-        "friday" : req.body.obj.friday,
-        "saturday" : req.body.obj.saturday
+        // "sem" : req.body.obj.sem,
+        // "monday" : req.body.obj.monday,
+        // "tuesday" : req.body.obj.tuesday,
+        // "wednesday" : req.body.obj.wednesday,
+        // "thursday" : req.body.obj.thursday,
+        // "friday" : req.body.obj.friday,
+        // "saturday" : req.body.obj.saturday
+    }
+    if(req.body.obj.sem){
+        obj["sem"] = req.body.obj.sem
+    }else{
+        obj["sem"] = 10
+    }
+
+    if(req.body.obj.monday){
+        obj["monday"] = req.body.obj.monday
+    }else{
+        obj["monday"] = []
+    }
+
+    if(req.body.obj.tuesday){
+        obj["tuesday"] = req.body.obj.tuesday
+    }else{
+        obj["tuesday"] = []
+    }
+
+    if(req.body.obj.wednesday){
+        obj["wednesday"] = req.body.obj.wednesday
+    }else{
+
+        obj["wednesday"] =[]
+    }
+
+
+    if(req.body.obj.thursday){
+        obj["thursday"] = req.body.obj.thursday
+    }else{
+        obj["thursday"] = []
+    }
+
+
+    if(req.body.obj.friday){
+        obj["friday"] = req.body.obj.friday
+    }else{
+        obj["friday"] = []
+    }
+
+
+    if(req.body.obj.saturday){
+        obj["saturday"] = req.body.obj.saturday
+    }else{
+        obj["saturday"] = []
     }
     // console.log(obj);
     // const collectionRef = db.collection('subjects');
@@ -200,7 +245,7 @@ setTimeout(() => {
         console.log("elloge");
         addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})
     }
-}, 3000);
+}, 6000);
 
 //   if(bo){
     // addDoc(collectionref , {obj}).catch((err)=>{console.log(err)})

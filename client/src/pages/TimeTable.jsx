@@ -1,6 +1,7 @@
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import axios from 'axios';
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 // import { l } from 'vite/dist/node/types.d-aGj9QkWt';
 
 export default function TimeTable() {
@@ -11,6 +12,7 @@ const[sem , setSem] = useState();
     const [thu , setThu] = useState("");
     const [fri , setFri] = useState("");
     const [sat , setSat] = useState("");
+    const navigate = useNavigate();
 
     const handleclick = async() => {
         const obj = {}
@@ -36,6 +38,12 @@ const[sem , setSem] = useState();
         console.log(obj)
         const rep = await axios.post('http://localhost:3000/user/addsubjects', {obj})
         console.log(rep)
+        if(rep){
+          navigate('/')
+        }else{
+          alert("error")
+        }
+
     }
   return (
     <div style={{marginLeft: '25%' , marginRight: '25%'}}>
